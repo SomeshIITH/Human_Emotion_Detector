@@ -1,0 +1,17 @@
+# tensorflow
+# opencv-python-headless
+# matplotlib
+# ipykernel
+# scikit-learn
+# nltk
+# streamlit
+# cv2
+
+tensorflow==2.15.0
+opencv-python==4.7.0.72
+numpy==1.24.3
+scikit-learn==1.3.2
+matplotlib==3.7.2
+nltk==3.8.1
+streamlit==1.28.0
+
