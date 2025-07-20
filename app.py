@@ -76,7 +76,8 @@ MAX_LEN = pickle.load(open(os.path.join(Main_dir,'models','MAX_LEN.pkl'),'rb'))
 
 
 lr_best_model = pickle.load(open(os.path.join(Main_dir,'models','lr_best_model.pkl'),'rb'))
-lstmmodel = load_model(os.path.join(Main_dir, 'models', 'lstmmodel.h5'))
+grumodel = load_model(os.path.join(Main_dir, 'models', 'grumodel.keras'), compile=False)
+lstmmodel = load_model(os.path.join(Main_dir, 'models', 'lstmmodel.keras'), compile=False)
 
     
 def clean_content(text):
@@ -108,12 +109,12 @@ def predict_text_by_mlmodel(text,lr_model,text_Encoder):
     print(f"Predicted emotion: {emotion[0]}") 
     return emotion[0]  #return string of emotion name ex 'joy'
     
-def predict_text_by_dlmodel(text,lstm_model,text_Encoder,tokenizer,MAX_LEN):    
+def predict_text_by_dlmodel(text,dl_model,text_Encoder,tokenizer,MAX_LEN):    
     text = clean_content(text) #return string
     text = [text] #vectisers not take string as input so make it list
     text = tokenizer.texts_to_sequences(text)
-    text = pad_sequences(text, maxlen=MAX_LEN, padding='post', truncating='post')
-    last_layer_output = lstm_model.predict(text)  
+    text = pad_sequences(text, maxlen=MAX_LEN, padding='post')
+    last_layer_output = dl_model.predict(text)  
     # print(last_layer_output)               #[[0.0716216  0.28323117 0.31504422 0.15884334 0.17125972]] as last layer is softmax return 2d array
     number = np.argmax(last_layer_output,axis=1)  #return 1d array [2]
     emotion = text_Encoder.inverse_transform(number)  #corresponding label name , return list ex ['joy']
@@ -132,7 +133,7 @@ if st.button("Predict Emotion from Text using ML Model"):
     st.success(f"Predicted Emotion (ML): {emotion}")
 
 if st.button("Predict Emotion from Text using DL Model"):
-    emotion = predict_text_by_dlmodel(text_input, lstmmodel, text_Encoder, tokenizer, MAX_LEN)
+    emotion = predict_text_by_dlmodel(text_input, grumodel, text_Encoder, tokenizer, MAX_LEN)
     st.success(f"Predicted Emotion (DL): {emotion}")
 
 
